@@ -1,0 +1,83 @@
+<div class="page">
+  <header class="page-header">
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">Catálogo del estudio</p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">Mis clases</h1>
+    </div>
+    <div class="page-actions">
+      <button
+        type="button"
+        class="btn-icon"
+        aria-label="Actualizar"
+        title="Actualizar"
+        (click)="cargar()"
+      >
+        <app-icon name="refresh" [size]="18" />
+      </button>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <div class="list-row sk-row">
+          <span class="row-icon skeleton sk-icon"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line" style="width: 55%"></span>
+            <span class="skeleton sk-line sk-line-sm" style="width: 40%"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state" role="alert">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar las clases</h3>
+      <p>{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargar()">
+        <app-icon name="refresh" [size]="18" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (clases().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="clipboard" [size]="28" /></span>
+      <h3>Sin clases disponibles</h3>
+      <p class="mb-0">Pronto habrá nuevas clases en el calendario</p>
+    </div>
+  } @else {
+    <div class="list">
+      @for (clase of clases(); track clase.idClase) {
+        <button type="button" class="list-row" (click)="abrir(clase)">
+          <span class="row-icon">
+            <app-icon [name]="horarioIcono(clase)" [size]="20" />
+          </span>
+          <span class="row-main">
+            <span class="row-title">{{ clase.nombre }}</span>
+            <span class="row-sub">
+              {{ diaTexto(clase) }}
+              @if (clase.horaInicio) {
+                · {{ clase.horaInicio }}–{{ clase.horaFin }}
+              }
+            </span>
+            <span class="row-sub">Coach {{ profesorTexto(clase) }}</span>
+            <span class="tag-row">
+              @if (clase.horario === 'M') {
+                <span class="badge badge-success">Mañana</span>
+              } @else if (clase.horario === 'V') {
+                <span class="badge badge-warning">Tarde</span>
+              }
+              @if (clase.personas) {
+                <span class="badge badge-muted">Cupo {{ clase.personas }}</span>
+              }
+            </span>
+          </span>
+          <span class="row-cta">
+            Ver asistencia
+            <app-icon name="chevron-right" [size]="16" />
+          </span>
+        </button>
+      }
+    </div>
+  }
+</div>

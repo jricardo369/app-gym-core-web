@@ -1,0 +1,299 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver a usuarios"
+      title="Volver"
+      (click)="volver()"
+    >
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div class="page-head-text">
+      <h1 class="page-title">Editar perfil</h1>
+      <p class="page-sub">{{ usuario() ? usuario()?.nombre : 'Cargando usuario' }}</p>
+    </div>
+    <div class="page-actions">
+      @if (esAlumno()) {
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          aria-label="Ver paquetes del usuario"
+          (click)="verPaquetes()"
+        >
+          <app-icon name="briefcase" [size]="16" />
+          <span class="hide-sm">Ver paquetes</span>
+        </button>
+      }
+      @if (totalMultas() > 0) {
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          aria-label="Eliminar todas las faltas"
+          (click)="eliminarFaltas()"
+        >
+          <app-icon name="trash" [size]="16" />
+          <span class="hide-sm">Eliminar faltas</span>
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="card" aria-busy="true" aria-label="Cargando perfil">
+      <div class="ep-sk">
+        <span class="skeleton u-sk-line w-40"></span>
+        <span class="skeleton u-sk-line"></span>
+        <span class="skeleton u-sk-line w-60"></span>
+        <span class="skeleton u-sk-line"></span>
+        <span class="skeleton u-sk-line w-60"></span>
+      </div>
+      <div class="loading-block"><span class="spinner"></span></div>
+    </div>
+  } @else if (error()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No se pudo abrir el perfil</h3>
+      <p>{{ error() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="volver()">
+        <app-icon name="arrow-left" [size]="16" />
+        Volver a usuarios
+      </button>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="ep-card card">
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="ep-rol">Tipo</label>
+          <select
+            id="ep-rol"
+            class="input"
+            formControlName="idRol"
+            [class.error]="invalido('idRol')"
+          >
+            @for (r of roles; track r.valor) {
+              <option [value]="r.valor">{{ r.texto }}</option>
+            }
+          </select>
+          @if (invalido('idRol')) {
+            <p class="error-text">Selecciona un tipo</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="ep-estatus">Estatus</label>
+          <select
+            id="ep-estatus"
+            class="input"
+            formControlName="estatus"
+            [class.error]="invalido('estatus')"
+          >
+            @for (e of estatusOpciones; track e.valor) {
+              <option [value]="e.valor">{{ e.texto }}</option>
+            }
+          </select>
+          @if (invalido('estatus')) {
+            <p class="error-text">Selecciona un estatus</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="ep-nombre">Nombre</label>
+          <input
+            id="ep-nombre"
+            class="input"
+            type="text"
+            formControlName="nombre"
+            placeholder="Nombre completo"
+            autocomplete="name"
+            [class.error]="invalido('nombre')"
+          />
+          @if (invalido('nombre')) {
+            <p class="error-text">El nombre es obligatorio</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="ep-usuario">Usuario</label>
+          <input
+            id="ep-usuario"
+            class="input"
+            type="text"
+            formControlName="usuario"
+            placeholder="usuario"
+            autocomplete="username"
+            spellcheck="false"
+            [class.error]="invalido('usuario')"
+          />
+          @if (invalido('usuario')) {
+            <p class="error-text">El usuario es obligatorio</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="ep-pass">Contraseña</label>
+          <input
+            id="ep-pass"
+            class="input"
+            type="password"
+            formControlName="contrasenia"
+            placeholder="••••••••"
+            autocomplete="new-password"
+          />
+          <p class="hint-text">Déjala vacía para conservar la actual</p>
+        </div>
+
+        <div class="field">
+          <label for="ep-mail">Correo electrónico</label>
+          <input
+            id="ep-mail"
+            class="input"
+            type="email"
+            formControlName="correoElectronico"
+            placeholder="correo@ejemplo.com"
+            autocomplete="email"
+            [class.error]="invalido('correoElectronico')"
+          />
+          @if (invalido('correoElectronico')) {
+            <p class="error-text">Ingresa un correo válido</p>
+          }
+        </div>
+
+        <div class="field">
+          <span class="field-label" id="ep-sexo-label">Sexo</span>
+          <div class="segment" role="group" aria-labelledby="ep-sexo-label">
+            <button
+              type="button"
+              [class.active]="form.controls.sexo.value === 'F'"
+              [attr.aria-pressed]="form.controls.sexo.value === 'F'"
+              (click)="form.controls.sexo.setValue('F')"
+            >
+              Femenino
+            </button>
+            <button
+              type="button"
+              [class.active]="form.controls.sexo.value === 'M'"
+              [attr.aria-pressed]="form.controls.sexo.value === 'M'"
+              (click)="form.controls.sexo.setValue('M')"
+            >
+              Masculino
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="ep-tel">Teléfono</label>
+          <input
+            id="ep-tel"
+            class="input"
+            type="tel"
+            formControlName="telefono"
+            placeholder="00 00 00 00"
+            autocomplete="tel"
+          />
+        </div>
+
+        @if (mostrarClasesRestantes()) {
+          <div class="field">
+            <label for="ep-clases">Clases restantes</label>
+            <input
+              id="ep-clases"
+              class="input"
+              type="number"
+              min="0"
+              formControlName="clasesRestantes"
+              placeholder="0"
+            />
+          </div>
+        }
+      </div>
+
+      @if (esAlumno()) {
+        <section class="ep-faltas">
+          <div class="section-title">
+            <h3>Faltas y multas</h3>
+            <span class="badge badge-lime">Alumno</span>
+          </div>
+
+          <div class="ep-falta-row">
+            <span class="ep-falta-txt">
+              Cuenta con <b>{{ contadorFaltas() }}</b> falta(s)
+            </span>
+            <div class="ep-falta-actions">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                aria-label="Agregar una falta"
+                (click)="ajustarFalta('I')"
+              >
+                <app-icon name="plus" [size]="16" />
+                Agregar
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                aria-label="Quitar una falta"
+                (click)="ajustarFalta('E')"
+              >
+                <app-icon name="minus" [size]="16" />
+                Quitar
+              </button>
+            </div>
+          </div>
+
+          <div class="ep-falta-row">
+            <span class="ep-falta-txt">
+              Cuenta con <b>{{ totalMultas() }}</b> multa(s)
+            </span>
+            @if (totalMultas() > 0) {
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                aria-label="Eliminar todas las multas"
+                (click)="eliminarFaltas()"
+              >
+                <app-icon name="trash" [size]="16" />
+                Eliminar faltas
+              </button>
+            }
+          </div>
+        </section>
+      }
+
+      <div class="ep-acciones">
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          aria-label="Activar usuario"
+          (click)="activarUser()"
+        >
+          <app-icon name="check" [size]="16" />
+          Activar
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          aria-label="Desactivar usuario"
+          (click)="desactivarUser()"
+        >
+          <app-icon name="close" [size]="16" />
+          Desactivar
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          aria-label="Marcar falta de pago"
+          (click)="faltaDePago()"
+        >
+          <app-icon name="alert" [size]="16" />
+          Falta de pago
+        </button>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        <app-icon name="check" [size]="18" />
+        Guardar cambios
+      </button>
+    </form>
+  }
+</div>

@@ -1,0 +1,81 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver a mi perfil"
+      title="Volver"
+      (click)="atras()"
+    >
+      <app-icon name="chevron-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">Historial</p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">Mis asistencias</h1>
+    </div>
+    <div class="page-actions">
+      <button
+        type="button"
+        class="btn-icon"
+        aria-label="Actualizar"
+        title="Actualizar"
+        (click)="cargar()"
+      >
+        <app-icon name="refresh" [size]="18" />
+      </button>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <div class="list-row sk-row">
+          <span class="row-icon skeleton sk-icon"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line" style="width: 50%"></span>
+            <span class="skeleton sk-line sk-line-sm" style="width: 65%"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state" role="alert">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar tu historial</h3>
+      <p>{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargar()">
+        <app-icon name="refresh" [size]="18" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (historial().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="calendar-x" [size]="28" /></span>
+      <h3>Sin clases</h3>
+      <p class="mb-0">Todavía no tienes asistencias registradas</p>
+      <button type="button" class="btn btn-primary" (click)="atras()">
+        <app-icon name="chevron-left" [size]="18" />
+        Volver
+      </button>
+    </div>
+  } @else {
+    <div class="list">
+      @for (item of historial(); track $index) {
+        <div class="list-row hist-row">
+          <span class="row-icon">
+            <app-icon [name]="iconoHorario(item)" [size]="20" />
+          </span>
+          <span class="row-main">
+            <span class="row-title">{{ titulo(item) }}</span>
+            <span class="row-sub">{{ detalle(item) }}</span>
+          </span>
+          @if (asistio(item)) {
+            <span class="badge badge-success">Asistió</span>
+          } @else {
+            <span class="badge badge-danger">No asistió</span>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

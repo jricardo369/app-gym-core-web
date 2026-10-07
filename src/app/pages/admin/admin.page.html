@@ -1,0 +1,83 @@
+<div class="page">
+  <header class="page-header">
+    <span class="avatar" aria-hidden="true">{{ session.iniciales() }}</span>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">Welcome back</p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">{{ nombre }}</h1>
+    </div>
+    <div class="page-actions">
+      <button type="button" class="btn-icon" aria-label="Notificaciones" title="Notificaciones">
+        <app-icon name="bell" [size]="18" />
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero lima -->
+  <section class="dash-hero">
+    <div class="dash-hero-text">
+      <span class="dash-hero-kicker">
+        <app-icon name="flame" [size]="14" /> ControGym
+      </span>
+      <h2>Tu panel<br />de entreno</h2>
+      <div class="dash-hero-pills">
+        <span class="dash-pill">
+          <app-icon name="clock" [size]="14" /> Hoy
+        </span>
+        <button type="button" class="dash-pill dash-pill-dark" (click)="ir(rutaCalendario)">
+          Ver calendario
+          <app-icon name="arrow-right" [size]="14" />
+        </button>
+      </div>
+    </div>
+    <div class="dash-hero-mark" aria-hidden="true">
+      <svg viewBox="0 0 120 70">
+        <path
+          d="M10 60 A 50 50 0 0 1 110 60"
+          fill="none"
+          stroke="#101010"
+          stroke-width="12"
+          stroke-linecap="round"
+          opacity="0.9"
+        />
+        <path
+          d="M10 60 A 50 50 0 0 1 85 15"
+          fill="none"
+          stroke="#f7fbff"
+          stroke-width="12"
+          stroke-linecap="round"
+        />
+      </svg>
+      <b>GO</b>
+    </div>
+  </section>
+
+  @if (mensaje() && mensaje() !== '' && esAlumno) {
+    <div class="dash-banner" role="status">
+      <app-icon name="bell" [size]="18" />
+      <span>{{ mensaje() }}</span>
+    </div>
+  }
+
+  <div class="section-title">
+    <h2>Today Target's</h2>
+    <span class="badge badge-lime">{{ etiquetaRol }}</span>
+  </div>
+
+  <div class="grid grid-2 grid-3">
+    @for (acceso of accesos; track acceso.ruta) {
+      <button type="button" class="card card-hover card-cta dash-card" (click)="ir(acceso.ruta)">
+        <span class="dash-card-icon">
+          <app-icon [name]="acceso.icon" [size]="22" />
+        </span>
+        <span class="dash-card-body">
+          <b>{{ acceso.titulo }}</b>
+          <small>{{ acceso.sub }}</small>
+        </span>
+        <span class="dash-card-cta">
+          {{ acceso.cta }}
+          <app-icon name="chevron-right" [size]="16" />
+        </span>
+      </button>
+    }
+  </div>
+</div>

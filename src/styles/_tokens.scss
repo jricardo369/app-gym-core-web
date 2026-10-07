@@ -1,0 +1,118 @@
+// Design tokens — LUA Studio Web (multi-theme support)
+// Default theme (base) — mantiene la identidad visual actual
+:root {
+  // Colores
+  --color-primary: #d5ff5f;
+  --color-on-primary: #101010;
+  --color-secondary: #e8ffa8;
+  --color-on-secondary: #101010;
+  --color-accent: #a3e635;
+  --color-on-accent: #101010;
+  --color-background: #101010;
+  --color-foreground: #f7fbff;
+  --color-muted: #2a2a2a;
+  --color-muted-foreground: #a1a1aa;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(213, 255, 95, 0.16);
+  --color-success: #a3e635;
+  --color-warning: #facc15;
+  --color-destructive: #f87171;
+  --color-ring: #d5ff5f;
+
+  --color-primary-soft: rgba(213, 255, 95, 0.14);
+  --color-destructive-soft: rgba(248, 113, 113, 0.14);
+  --color-warning-soft: rgba(250, 204, 21, 0.14);
+
+  // Tipografía
+  --font-display: 'Barlow Condensed', 'Poppins', sans-serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+
+  --fs-display: clamp(2rem, 4vw, 3.25rem);
+  --fs-h1: clamp(1.6rem, 3vw, 2rem);
+  --fs-h2: clamp(1.3rem, 2vw, 1.6rem);
+  --fs-h3: 1.25rem;
+  --fs-body: 0.9375rem;
+  --fs-small: 0.8125rem;
+  --fs-xs: 0.75rem;
+
+  // Espaciado (ritmo 4/8)
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  // Radios
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  // Sombras
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.55);
+  --shadow-primary: 0 8px 24px rgba(213, 255, 95, 0.22);
+
+  // Layout
+  --sidebar-w: 240px;
+  --topbar-h: 64px;
+  --bottomnav-h: 64px;
+  --content-max: 1200px;
+
+  // Motion
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur: 200ms;
+}
+
+// === IRODA THEME (dark) ===
+// Colores oscuros: #a0543e, #d7a187, #70665d, #f0e9df, #24201e
+.theme-iroda {
+  --color-primary: #a0543e;
+  --color-on-primary: #f0e9df;
+  --color-secondary: #d7a187;
+  --color-on-secondary: #24201e;
+  --color-accent: #d7a187;
+  --color-on-accent: #24201e;
+  --color-background: #24201e;
+  --color-foreground: #f0e9df;
+  --color-muted: #4a413c;
+  --color-muted-foreground: #70665d;
+  --color-border: rgba(255, 255, 255, 0.05);
+  --color-border-strong: rgba(160, 84, 62, 0.15);
+  --color-success: #70665d;
+  --color-warning: #d7a187;
+  --color-destructive: #a0543e;
+  --color-ring: #a0543e;
+
+  --color-primary-soft: rgba(160, 84, 62, 0.14);
+  --color-destructive-soft: rgba(160, 84, 62, 0.14);
+  --color-warning-soft: rgba(215, 161, 135, 0.14);
+}
+
+// === LUA THEME (light) ===
+// Colores claros: FFbe00, e4dfd8, 24221b
+.theme-lua {
+  --color-primary: #FFbe00;
+  --color-on-primary: #24221b;
+  --color-secondary: #e4dfd8;
+  --color-on-secondary: #24221b;
+  --color-accent: #FFbe00;
+  --color-on-accent: #24221b;
+  --color-background: #f5f5f0;
+  --color-foreground: #24221b;
+  --color-muted: #78706e;
+  --color-muted-foreground: #a1a1aa;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(255, 190, 0, 0.15);
+  --color-success: #24221b;
+  --color-warning: #FFbe00;
+  --color-destructive: #a0543e;
+  --color-ring: #FFbe00;
+
+  --color-primary-soft: rgba(255, 190, 0, 0.14);
+  --color-destructive-soft: rgba(160, 84, 62, 0.14);
+  --color-warning-soft: rgba(255, 190, 0, 0.14);
+}

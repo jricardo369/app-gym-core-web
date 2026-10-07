@@ -1,0 +1,44 @@
+.hero-content {
+  max-width: 480px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.02;
+  color: var(--color-foreground);
+  margin: 0 0 var(--space-md);
+}
+
+.hero-text {
+  color: var(--color-muted-foreground);
+  font-size: 1rem;
+  max-width: 42ch;
+
+  strong {
+    color: var(--color-primary);
+  }
+}
+
+.hero-list {
+  list-style: none;
+  margin: var(--space-lg) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+  color: var(--color-foreground);
+  font-size: var(--fs-small);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+
+    app-icon {
+      color: var(--color-primary);
+    }
+  }
+}

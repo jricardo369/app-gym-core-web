@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+/* Resumen de lugar apartado */
+.resumen-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-color: var(--color-border-strong);
+}
+
+.resumen-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.resumen-texto {
+  min-width: 0;
+
+  b {
+    display: block;
+    font-weight: 600;
+  }
+}
+
+/* Grid de lugares */
+.lugares-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.lugar-btn {
+  min-height: 56px;
+  border-radius: var(--radius-md);
+  background: var(--color-card-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-on-primary);
+    transform: translateY(-2px);
+  }
+
+  &.ocupado,
+  &:disabled {
+    background: var(--color-card);
+    border-color: var(--color-border);
+    color: #52525b;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin: var(--space-md) 0;
+  font-size: var(--fs-xs);
+  color: var(--color-muted-foreground);
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  i {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+  }
+
+  i.dispo {
+    background: var(--color-card-2);
+  }
+
+  i.ocup {
+    background: var(--color-card);
+  }
+}
+
+/* Aviso de cancelación */
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-warning-soft);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  border-radius: var(--radius-md);
+  color: var(--color-warning);
+  font-size: var(--fs-small);
+
+  app-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+
+@media (min-width: 768px) {
+  .lugares-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

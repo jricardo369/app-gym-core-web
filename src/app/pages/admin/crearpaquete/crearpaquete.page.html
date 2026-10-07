@@ -1,0 +1,94 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver al perfil"
+      title="Volver"
+      (click)="volver()"
+    >
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div class="page-head-text">
+      <h1 class="page-title">Paquetes</h1>
+      <p class="page-sub">Historial de inscripciones del usuario {{ idUsuario() }}</p>
+    </div>
+    <div class="page-actions">
+      @if (puedeAgregar) {
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          aria-label="Agregar paquete"
+          (click)="agregarPaquete()"
+        >
+          <app-icon name="plus" [size]="16" />
+          <span class="hide-sm">Agregar paquete</span>
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true" aria-label="Cargando paquetes">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <div class="card cp-sk">
+          <span class="skeleton cp-sk-line w-60"></span>
+          <span class="skeleton cp-sk-line w-40"></span>
+          <span class="skeleton cp-sk-line w-30"></span>
+        </div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No se pudo cargar</h3>
+      <p>{{ error() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargar()">
+        <app-icon name="refresh" [size]="16" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (inscripciones().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="ticket" [size]="28" /></span>
+      <h3>Sin paquetes</h3>
+      <p>Este usuario todavía no tiene inscripciones registradas</p>
+      @if (puedeAgregar) {
+        <button type="button" class="btn btn-primary" (click)="agregarPaquete()">
+          <app-icon name="plus" [size]="16" />
+          Agregar paquete
+        </button>
+      }
+    </div>
+  } @else {
+    <ul class="list cp-list">
+      @for (p of inscripciones(); track $index) {
+        <li class="card cp-item">
+          <div class="cp-head">
+            <span class="cp-icon" aria-hidden="true">
+              <app-icon name="ticket" [size]="18" />
+            </span>
+            <div class="cp-main">
+              <b>{{ nombrePaquete(p) }}</b>
+              <small>{{ p.descripcionTipoPago || '—' }}</small>
+            </div>
+            @if (p.vencimiento && p.vencimiento !== 'N/A') {
+              <span class="badge badge-warning">{{ p.vencimiento }}</span>
+            }
+          </div>
+
+          <dl class="cp-meta">
+            <div>
+              <dt>Fecha de inicio</dt>
+              <dd>{{ p.fechaInicio || '—' }}</dd>
+            </div>
+            <div>
+              <dt>Comentario</dt>
+              <dd>{{ p.comentario || 'Sin comentario' }}</dd>
+            </div>
+          </dl>
+        </li>
+      }
+    </ul>
+  }
+</div>

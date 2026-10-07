@@ -1,0 +1,130 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver a mi perfil"
+      title="Volver"
+      (click)="atras()"
+    >
+      <app-icon name="chevron-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">Seguridad</p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">Cambiar contraseña</h1>
+    </div>
+  </header>
+
+  <div class="card" style="max-width: 520px">
+    <div class="empty-state" style="padding: 0 0 var(--space-md)">
+      <span class="empty-icon"><app-icon name="key" [size]="28" /></span>
+      <h3>Resetear contraseña</h3>
+      <p class="mb-0">Ingresa los datos para poder resetear tu contraseña</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label for="contraseniaAnterior">Contraseña anterior</label>
+        <div class="input-wrap">
+          <span class="input-icon"><app-icon name="lock" [size]="18" /></span>
+          <input
+            id="contraseniaAnterior"
+            class="input"
+            type="password"
+            formControlName="contraseniaAnterior"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            [class.error]="
+              form.controls.contraseniaAnterior.touched &&
+              form.controls.contraseniaAnterior.invalid
+            "
+          />
+        </div>
+        @if (form.controls.contraseniaAnterior.touched && form.controls.contraseniaAnterior.invalid) {
+          <p class="error-text">La contraseña anterior es obligatoria</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="contraseniaNueva">Contraseña nueva</label>
+        <div class="input-wrap">
+          <span class="input-icon"><app-icon name="lock" [size]="18" /></span>
+          <input
+            id="contraseniaNueva"
+            class="input"
+            type="password"
+            formControlName="contraseniaNueva"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            maxlength="11"
+            [class.error]="
+              form.controls.contraseniaNueva.touched && form.controls.contraseniaNueva.invalid
+            "
+          />
+        </div>
+        @if (form.controls.contraseniaNueva.touched && form.controls.contraseniaNueva.invalid) {
+          <p class="error-text">
+            @if (form.controls.contraseniaNueva.errors?.['required']) {
+              La contraseña nueva es obligatoria
+            } @else {
+              Máximo 11 caracteres
+            }
+          </p>
+        } @else {
+          <p class="hint-text">Máximo 11 caracteres</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="confirmar">Confirmar contraseña</label>
+        <div class="input-wrap">
+          <span class="input-icon"><app-icon name="lock" [size]="18" /></span>
+          <input
+            id="confirmar"
+            class="input"
+            type="password"
+            formControlName="confirmar"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            maxlength="11"
+            [class.error]="form.controls.confirmar.touched && form.controls.confirmar.invalid"
+          />
+        </div>
+        @if (form.controls.confirmar.touched && form.controls.confirmar.invalid) {
+          <p class="error-text">
+            @if (form.controls.confirmar.errors?.['required']) {
+              Confirma la contraseña nueva
+            } @else {
+              Máximo 11 caracteres
+            }
+          </p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        style="margin-top: var(--space-md)"
+        [disabled]="enviando()"
+      >
+        @if (enviando()) {
+          <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+          Cambiando…
+        } @else {
+          Cambiar
+          <app-icon name="key" [size]="18" />
+        }
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-block"
+        style="margin-top: var(--space-sm)"
+        (click)="atras()"
+      >
+        <app-icon name="chevron-left" [size]="18" />
+        Atrás
+      </button>
+    </form>
+  </div>
+</div>

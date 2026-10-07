@@ -1,0 +1,176 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver al panel"
+      title="Volver"
+      (click)="volver()"
+    >
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div class="page-head-text">
+      <h1 class="page-title">Usuarios</h1>
+      <p class="page-sub">Alumnos y coaches del estudio</p>
+    </div>
+    <div class="page-actions">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        aria-label="Registrar usuario"
+        (click)="registro()"
+      >
+        <app-icon name="user-plus" [size]="16" />
+        <span class="hide-sm">Nuevo</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="perfil-tools">
+    <div class="search-bar">
+      <span class="input-icon"><app-icon name="search" [size]="18" /></span>
+      <input
+        id="buscar"
+        class="input"
+        type="search"
+        placeholder="Buscar por nombre"
+        aria-label="Buscar por nombre"
+        autocomplete="off"
+        [value]="texto()"
+        (input)="setTexto($event)"
+      />
+    </div>
+
+    <div class="segment" role="group" aria-label="Filtrar por tipo de usuario">
+      <button
+        type="button"
+        [class.active]="filtro() === 'usuarios'"
+        [attr.aria-pressed]="filtro() === 'usuarios'"
+        (click)="setFiltro('usuarios')"
+      >
+        Usuarios
+      </button>
+      <button
+        type="button"
+        [class.active]="filtro() === 'coaches'"
+        [attr.aria-pressed]="filtro() === 'coaches'"
+        (click)="setFiltro('coaches')"
+      >
+        Coaches
+      </button>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true" aria-label="Cargando usuarios">
+      @for (item of [1, 2, 3, 4, 5]; track item) {
+        <div class="u-row card u-row-skeleton">
+          <span class="skeleton u-sk-avatar"></span>
+          <span class="u-sk-main">
+            <span class="skeleton u-sk-line w-60"></span>
+            <span class="skeleton u-sk-line w-40"></span>
+            <span class="skeleton u-sk-line w-30"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No se pudo cargar</h3>
+      <p>{{ error() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargar()">
+        <app-icon name="refresh" [size]="16" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (lista().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="users" [size]="28" /></span>
+      <h3>{{ filtro() === 'coaches' ? 'Sin coaches' : 'Sin usuarios' }}</h3>
+      <p>
+        {{
+          texto()
+            ? 'No hay coincidencias para tu búsqueda'
+            : filtro() === 'coaches'
+              ? 'No hay coaches registrados'
+              : 'No hay usuarios registrados'
+        }}
+      </p>
+      <button type="button" class="btn btn-primary" (click)="registro()">
+        <app-icon name="user-plus" [size]="16" />
+        Registrar usuario
+      </button>
+    </div>
+  } @else {
+    <ul class="list u-list">
+      @for (u of lista(); track u.idUsuario) {
+        <li class="u-row card">
+          <button
+            type="button"
+            class="u-open"
+            [attr.aria-label]="'Editar perfil de ' + u.nombre"
+            (click)="abrir(u)"
+          >
+            <span class="avatar" aria-hidden="true">{{ iniciales(u.nombre) }}</span>
+            <span class="u-main">
+              <span class="u-name" [title]="u.nombre">{{ nombreCorto(u.nombre) }}</span>
+              <span class="u-sub">{{ subtitulo(u) }}</span>
+              <span class="u-tags">
+                @if (esAlumno(u) && u.vencimiento && u.vencimiento !== 'N/A') {
+                  <span class="badge badge-muted">{{ u.vencimiento }}</span>
+                }
+                @if (u.totalMultas && u.totalMultas > 0) {
+                  <span class="badge badge-warning">{{ u.totalMultas }} multas</span>
+                }
+              </span>
+            </span>
+            <span class="u-side">
+              <span [class]="estatusInfo(u).cls">{{ estatusInfo(u).texto }}</span>
+            </span>
+            <app-icon name="chevron-right" [size]="18" />
+          </button>
+
+          @if (u.idRol !== 1) {
+            <div class="u-actions">
+              <button
+                type="button"
+                class="btn-icon"
+                aria-label="Activar usuario"
+                title="Activar"
+                (click)="activar(u)"
+              >
+                <app-icon name="check" [size]="18" />
+              </button>
+              <button
+                type="button"
+                class="btn-icon"
+                aria-label="Desactivar usuario"
+                title="Desactivar"
+                (click)="desactivar(u)"
+              >
+                <app-icon name="close" [size]="18" />
+              </button>
+              <button
+                type="button"
+                class="btn-icon btn-icon-warn"
+                aria-label="Marcar falta de pago"
+                title="Falta de pago"
+                (click)="bPago(u)"
+              >
+                <app-icon name="alert" [size]="18" />
+              </button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+
+    @if (hayMas()) {
+      <button type="button" class="btn btn-secondary btn-block u-more" (click)="cargarMas()">
+        <app-icon name="chevron-down" [size]="16" />
+        Cargar más ({{ lista().length }} de {{ filtrados().length }})
+      </button>
+    }
+  }
+</div>

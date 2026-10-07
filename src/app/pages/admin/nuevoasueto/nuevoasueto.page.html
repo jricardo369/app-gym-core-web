@@ -1,0 +1,69 @@
+<div class="page">
+  <header class="page-header">
+    <button type="button" class="btn-icon" (click)="atras()" aria-label="Volver a los asuetos" title="Volver">
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">Bloquea días en el calendario</p>
+      <h1 class="page-title">Nuevo asueto</h1>
+    </div>
+  </header>
+
+  <form [formGroup]="na" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label for="fecha">Fecha</label>
+      <input
+        id="fecha"
+        class="input"
+        type="date"
+        formControlName="fecha"
+        [class.error]="na.controls.fecha.touched && na.controls.fecha.invalid"
+      />
+      @if (na.controls.fecha.touched && na.controls.fecha.invalid) {
+        <p class="error-text">Selecciona la fecha del asueto</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="idClase">Clase</label>
+      <select
+        id="idClase"
+        class="input"
+        formControlName="idClase"
+        [class.error]="na.controls.idClase.touched && na.controls.idClase.invalid"
+      >
+        <option [ngValue]="null" disabled>
+          {{ cargandoClases() ? 'Cargando clases…' : 'Selecciona una clase' }}
+        </option>
+        @for (clase of clases(); track clase.idClase) {
+          <option [ngValue]="clase.idClase">{{ etiquetaClase(clase) }}</option>
+        }
+      </select>
+      @if (na.controls.idClase.touched && na.controls.idClase.invalid) {
+        <p class="error-text">Selecciona una clase</p>
+      } @else {
+        <p class="hint-text">La clase que se bloqueará en la fecha indicada</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="tipo">Tipo</label>
+      <select id="tipo" class="input" formControlName="tipo">
+        <option value="1">Diario</option>
+        <option value="7">Semanal</option>
+        <option value="14">Quincenal</option>
+      </select>
+      <p class="hint-text">Frecuencia con la que se repite el asueto</p>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+      @if (enviando()) {
+        <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+        Guardando…
+      } @else {
+        <app-icon name="plus" [size]="16" />
+        Agregar
+      }
+    </button>
+  </form>
+</div>

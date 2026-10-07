@@ -1,0 +1,163 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver al calendario"
+      title="Volver"
+      (click)="atras()"
+    >
+      <app-icon name="chevron-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">
+        {{ fechaf }} · {{ descripcionHorario || 'Clase' }}
+      </p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">Lugares</h1>
+    </div>
+    <div class="page-actions">
+      <button
+        type="button"
+        class="btn-icon"
+        aria-label="Actualizar"
+        title="Actualizar"
+        (click)="cargar()"
+      >
+        <app-icon name="refresh" [size]="18" />
+      </button>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="loading-block" aria-busy="true">
+      <span class="spinner"></span>
+      Cargando lugares…
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state" role="alert">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar los lugares</h3>
+      <p>{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargar()">
+        <app-icon name="refresh" [size]="18" />
+        Reintentar
+      </button>
+    </div>
+  } @else {
+    <!-- Ya tiene lugar apartado -->
+    @if (asiste) {
+      <div class="card resumen-card">
+        <span class="resumen-icon"><app-icon name="pin" [size]="22" /></span>
+        <div class="resumen-texto">
+          <b>Tu lugar está apartado</b>
+          <p class="small text-muted mb-0">
+            {{ descripcionHorario }} · {{ fechaf }} · Lugar
+            {{ lugarReservado || '—' }}
+          </p>
+        </div>
+      </div>
+
+      <p class="text-center small text-muted">¿Deseas eliminar tu asistencia?</p>
+      <button
+        type="button"
+        class="btn btn-danger btn-block"
+        [disabled]="procesando()"
+        (click)="eliminarAsistencia()"
+      >
+        @if (procesando()) {
+          <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+          Procesando…
+        } @else {
+          <app-icon name="trash" [size]="18" />
+          Eliminar asistencia
+        }
+      </button>
+    }
+
+    <!-- Clase llena: solo lista de espera -->
+    @if (claseLlena && !asiste) {
+      <div class="empty-state">
+        <span class="empty-icon"><app-icon name="users" [size]="28" /></span>
+        <h3>La clase está llena</h3>
+        <p>
+          @if (enListaEspera) {
+            Estás en la lista de espera. Te avisaremos cuando se desocupe un lugar.
+          } @else {
+            Espera a que se desocupe un lugar para poder asistir.
+          }
+        </p>
+        @if (enListaEspera) {
+          <button
+            type="button"
+            class="btn btn-danger"
+            [disabled]="procesando()"
+            (click)="quitarListaEspera()"
+          >
+            <app-icon name="close" [size]="18" />
+            Quitar de lista de espera
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="procesando()"
+            (click)="agregarListaEspera()"
+          >
+            <app-icon name="plus" [size]="18" />
+            Agregar a lista de espera
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Grid de lugares -->
+    @if (mostrarGrid()) {
+      <div class="section-title">
+        <h2>Elige tu lugar</h2>
+        <span class="badge badge-success">{{ disponibles() }} libres</span>
+      </div>
+
+      <div class="grid grid-4 lugares-grid">
+        @for (lugar of lugares(); track lugar.numero) {
+          <button
+            type="button"
+            class="lugar-btn"
+            [class.ocupado]="lugar.ocupado"
+            [disabled]="lugar.ocupado || procesando()"
+            [attr.aria-label]="'Lugar ' + lugar.numero + (lugar.ocupado ? ' ocupado' : ' disponible')"
+            (click)="apartar(lugar.numero)"
+          >
+            {{ lugar.numero }}
+          </button>
+        }
+      </div>
+
+      <div class="leyenda">
+        <span><i class="dispo"></i> Disponible</span>
+        <span><i class="ocup"></i> Ocupado</span>
+      </div>
+
+      @if (enListaEspera) {
+        <button
+          type="button"
+          class="btn btn-ghost btn-block"
+          [disabled]="procesando()"
+          (click)="quitarListaEspera()"
+        >
+          <app-icon name="close" [size]="18" />
+          Quitar de lista de espera
+        </button>
+      }
+    }
+
+    @if (horasCancelacion()) {
+      <div class="aviso" role="note">
+        <app-icon name="info" [size]="16" />
+        <span>
+          Para no tener multa es necesario cancelar la clase
+          {{ horasCancelacion() }} horas antes.
+        </span>
+      </div>
+    }
+  }
+</div>

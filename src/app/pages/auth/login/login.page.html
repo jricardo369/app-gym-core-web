@@ -1,0 +1,86 @@
+<div class="brand-mobile" style="justify-content: center; margin-bottom: var(--space-lg)">
+  <span class="brand-mark" aria-hidden="true">L</span>
+  <div style="text-align: left">
+    <div class="brand-name" style="font-size: 1.15rem">LUA Studio</div>
+    <div class="brand-sub">Gym Core</div>
+  </div>
+</div>
+
+<h1 style="text-align: center">Bienvenido</h1>
+<p class="text-muted small text-center" style="margin-bottom: var(--space-lg)">
+  Inicia sesión para reservar tu próxima clase
+</p>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="field">
+    <label for="usuario">Usuario</label>
+    <div class="input-wrap">
+      <span class="input-icon"><app-icon name="mail" [size]="18" /></span>
+      <input
+        id="usuario"
+        class="input"
+        type="text"
+        formControlName="usuario"
+        placeholder="Ingresa tu usuario"
+        autocomplete="username"
+        spellcheck="false"
+        [class.error]="form.controls.usuario.touched && form.controls.usuario.invalid"
+      />
+    </div>
+    @if (form.controls.usuario.touched && form.controls.usuario.invalid) {
+      <p class="error-text">El usuario es obligatorio</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="contrasenia">Contraseña</label>
+    <div class="input-wrap">
+      <span class="input-icon"><app-icon name="lock" [size]="18" /></span>
+      <input
+        id="contrasenia"
+        class="input has-action"
+        [type]="mostrarPass() ? 'text' : 'password'"
+        formControlName="contrasenia"
+        placeholder="Ingresa tu contraseña"
+        autocomplete="current-password"
+        [class.error]="
+          form.controls.contrasenia.touched && form.controls.contrasenia.invalid
+        "
+      />
+      <button
+        type="button"
+        class="input-action"
+        (click)="togglePass()"
+        [attr.aria-label]="mostrarPass() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+        [attr.aria-pressed]="mostrarPass()"
+      >
+        <app-icon [name]="mostrarPass() ? 'eye-off' : 'eye'" [size]="18" />
+      </button>
+    </div>
+    @if (form.controls.contrasenia.touched && form.controls.contrasenia.invalid) {
+      <p class="error-text">La contraseña es obligatoria</p>
+    }
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+    <a routerLink="/recuperar" class="small">¿Olvidaste tu contraseña?</a>
+    <a routerLink="/registro" class="small">Crear cuenta</a>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary btn-block"
+    style="margin-top: var(--space-md)"
+    [disabled]="enviando()"
+  >
+    @if (enviando()) {
+      <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+      Ingresando…
+    } @else {
+      Start Workout
+      <app-icon name="arrow-right" [size]="18" />
+    }
+  </button>
+</form>
+
+<p class="auth-footer">V1.0 • TRACK LIKE A PRO</p>

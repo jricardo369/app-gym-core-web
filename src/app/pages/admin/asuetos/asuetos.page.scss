@@ -1,0 +1,77 @@
+.search-bar {
+  margin-bottom: var(--space-sm);
+}
+
+.asueto-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--dur) var(--ease);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .row-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .row-title {
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .row-sub {
+    color: var(--color-muted-foreground);
+    font-size: var(--fs-small);
+  }
+
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    margin-left: auto;
+  }
+}
+
+.row-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Skeleton */
+.sk-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sk-line {
+  display: block;
+  width: 60%;
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.sk-short {
+  width: 35%;
+  height: 10px;
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .search-bar {
+    max-width: 420px;
+  }
+}

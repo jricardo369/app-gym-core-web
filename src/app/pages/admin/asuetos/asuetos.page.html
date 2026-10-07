@@ -1,0 +1,117 @@
+<div class="page">
+  <header class="page-header">
+    <button type="button" class="btn-icon" (click)="atras()" aria-label="Volver al inicio" title="Volver">
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">Días bloqueados</p>
+      <h1 class="page-title">Asuetos</h1>
+    </div>
+    <div class="page-actions">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        (click)="irNuevo()"
+        aria-label="Nuevo asueto"
+      >
+        <app-icon name="plus" [size]="16" />
+        Nuevo
+      </button>
+    </div>
+  </header>
+
+  <div class="search-bar">
+    <span class="input-icon"><app-icon name="search" [size]="18" /></span>
+    <input
+      id="buscar-asueto"
+      class="input"
+      type="search"
+      placeholder="Buscar por fecha"
+      autocomplete="off"
+      [value]="textoBuscar()"
+      (input)="buscar($event)"
+      aria-label="Buscar asuetos"
+    />
+  </div>
+
+  <div class="section-title">
+    <h2>Calendario</h2>
+    <span class="badge badge-lime">{{ (asuetos() | filtro:textoBuscar()).length }}</span>
+  </div>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="asueto-row">
+          <span class="skeleton sk-ico"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line"></span>
+            <span class="skeleton sk-line sk-short"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar los asuetos</h3>
+      <p class="text-muted">{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="cargar()">
+        <app-icon name="refresh" [size]="16" />
+        Reintentar
+      </button>
+    </div>
+  } @else if ((asuetos() | filtro:textoBuscar()).length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">
+        <app-icon [name]="textoBuscar() ? 'search' : 'calendar-x'" [size]="28" />
+      </span>
+      <h3>{{ textoBuscar() ? 'Sin resultados' : 'Sin asuetos' }}</h3>
+      <p class="text-muted">
+        @if (textoBuscar()) {
+          Prueba con otra fecha
+        } @else {
+          Aún no hay días bloqueados
+        }
+      </p>
+      @if (!textoBuscar()) {
+        <button type="button" class="btn btn-primary btn-sm" (click)="irNuevo()">
+          <app-icon name="plus" [size]="16" />
+          Nuevo asueto
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="list">
+      @for (asueto of asuetos() | filtro:textoBuscar(); track asueto.fecha) {
+        <div class="asueto-row">
+          <span class="avatar">
+            <app-icon name="calendar-x" [size]="20" />
+          </span>
+          <span class="row-main">
+            <span class="row-head">
+              <b class="row-title">{{ asueto.fechaDescripcion || asueto.fecha }}</b>
+              <span class="badge badge-muted">{{ tipoTexto(asueto.tipo) }}</span>
+            </span>
+            @if (asueto.claseDescripcion) {
+              <span class="row-sub">Descanso en la clase {{ asueto.claseDescripcion }}</span>
+            } @else {
+              <span class="row-sub">{{ asueto.fecha }}</span>
+            }
+          </span>
+          <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            (click)="eliminar(asueto.fecha)"
+            [disabled]="eliminando()"
+            aria-label="Eliminar asueto"
+            title="Eliminar asueto"
+          >
+            <app-icon name="trash" [size]="16" />
+            <span class="hide-sm">Eliminar</span>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

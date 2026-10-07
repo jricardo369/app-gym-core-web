@@ -1,0 +1,196 @@
+<div class="brand-mobile" style="justify-content: center; margin-bottom: var(--space-lg)">
+  <span class="brand-mark" aria-hidden="true">L</span>
+  <div style="text-align: left">
+    <div class="brand-name" style="font-size: 1.15rem">LUA Studio</div>
+    <div class="brand-sub">Gym Core</div>
+  </div>
+</div>
+
+<h1 style="text-align: center">Crear usuario</h1>
+<p class="text-muted small text-center" style="margin-bottom: var(--space-lg)">
+  Registra un nuevo acceso al estudio
+</p>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="field">
+    <label for="rol">Tipo</label>
+    <select
+      id="rol"
+      class="input"
+      formControlName="rol"
+      [class.error]="form.controls.rol.touched && form.controls.rol.invalid"
+    >
+      <option value="" disabled>Selecciona tipo</option>
+      @for (rol of roles; track rol.valor) {
+        <option [value]="rol.valor">{{ rol.etiqueta }}</option>
+      }
+    </select>
+    @if (form.controls.rol.touched && form.controls.rol.invalid) {
+      <p class="error-text">Selecciona un tipo de usuario</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="usuario">Usuario</label>
+    <div class="input-wrap">
+      <span class="input-icon"><app-icon name="user" [size]="18" /></span>
+      <input
+        id="usuario"
+        class="input"
+        type="text"
+        formControlName="usuario"
+        placeholder="usuario"
+        autocomplete="username"
+        spellcheck="false"
+        [class.error]="form.controls.usuario.touched && form.controls.usuario.invalid"
+      />
+    </div>
+    @if (form.controls.usuario.touched && form.controls.usuario.invalid) {
+      <p class="error-text">El usuario es obligatorio</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="contrasenia">Contraseña</label>
+    <div class="input-wrap">
+      <span class="input-icon"><app-icon name="lock" [size]="18" /></span>
+      <input
+        id="contrasenia"
+        class="input has-action"
+        [type]="mostrarPass() ? 'text' : 'password'"
+        formControlName="contrasenia"
+        placeholder="••••••••"
+        autocomplete="new-password"
+        [class.error]="
+          form.controls.contrasenia.touched && form.controls.contrasenia.invalid
+        "
+      />
+      <button
+        type="button"
+        class="input-action"
+        (click)="togglePass()"
+        [attr.aria-label]="mostrarPass() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+        [attr.aria-pressed]="mostrarPass()"
+      >
+        <app-icon [name]="mostrarPass() ? 'eye-off' : 'eye'" [size]="18" />
+      </button>
+    </div>
+    @if (form.controls.contrasenia.touched && form.controls.contrasenia.invalid) {
+      <p class="error-text">La contraseña es obligatoria</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="nombre">Nombre</label>
+    <input
+      id="nombre"
+      class="input"
+      type="text"
+      formControlName="nombre"
+      placeholder="Nombre completo"
+      autocomplete="name"
+      [class.error]="form.controls.nombre.touched && form.controls.nombre.invalid"
+    />
+    @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+      <p class="error-text">El nombre es obligatorio</p>
+    }
+  </div>
+
+  <div class="field">
+    <span class="field-label" id="sexo-label">Sexo</span>
+    <div class="segment" role="group" aria-labelledby="sexo-label">
+      <button
+        type="button"
+        [class.active]="form.controls.sexo.value === 'F'"
+        [attr.aria-pressed]="form.controls.sexo.value === 'F'"
+        (click)="seleccionarSexo('F')"
+      >
+        Femenino
+      </button>
+      <button
+        type="button"
+        [class.active]="form.controls.sexo.value === 'M'"
+        [attr.aria-pressed]="form.controls.sexo.value === 'M'"
+        (click)="seleccionarSexo('M')"
+      >
+        Masculino
+      </button>
+    </div>
+    @if (form.controls.sexo.touched && form.controls.sexo.invalid) {
+      <p class="error-text">Selecciona el sexo</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="correoElectronico">Correo electrónico</label>
+    <div class="input-wrap">
+      <span class="input-icon"><app-icon name="mail" [size]="18" /></span>
+      <input
+        id="correoElectronico"
+        class="input"
+        type="email"
+        formControlName="correoElectronico"
+        placeholder="correo@ejemplo.com"
+        autocomplete="email"
+        inputmode="email"
+        [class.error]="
+          form.controls.correoElectronico.touched && form.controls.correoElectronico.invalid
+        "
+      />
+    </div>
+    @if (form.controls.correoElectronico.touched && form.controls.correoElectronico.invalid) {
+      <p class="error-text">
+        @if (form.controls.correoElectronico.errors?.['required']) {
+          El correo es obligatorio
+        } @else {
+          Ingresa un correo electrónico válido
+        }
+      </p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="telefono">Teléfono</label>
+    <div class="input-wrap">
+      <span class="input-icon"><app-icon name="phone" [size]="18" /></span>
+      <input
+        id="telefono"
+        class="input"
+        type="tel"
+        formControlName="telefono"
+        placeholder="0"
+        autocomplete="tel"
+        inputmode="tel"
+        [class.error]="form.controls.telefono.touched && form.controls.telefono.invalid"
+      />
+    </div>
+    @if (form.controls.telefono.touched && form.controls.telefono.invalid) {
+      <p class="error-text">El teléfono es obligatorio</p>
+    }
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary btn-block"
+    style="margin-top: var(--space-md)"
+    [disabled]="enviando()"
+  >
+    @if (enviando()) {
+      <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+      Registrando…
+    } @else {
+      Registrar
+      <app-icon name="arrow-right" [size]="18" />
+    }
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-ghost btn-block"
+    style="margin-top: var(--space-sm)"
+    (click)="atras()"
+  >
+    <app-icon name="chevron-left" [size]="18" />
+    Atrás
+  </button>
+</form>

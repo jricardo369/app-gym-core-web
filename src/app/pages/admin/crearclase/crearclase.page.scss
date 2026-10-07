@@ -1,0 +1,21 @@
+.segment button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.input[type='date'],
+.input[type='number'] {
+  color-scheme: dark;
+}
+
+form {
+  max-width: 720px;
+}
+
+@media (min-width: 1024px) {
+  .segment button {
+    min-height: 44px;
+  }
+}

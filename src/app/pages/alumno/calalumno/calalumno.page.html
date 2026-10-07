@@ -1,0 +1,133 @@
+<div class="page">
+  <header class="page-header">
+    <span class="avatar" aria-hidden="true">{{ session.iniciales() }}</span>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">Hola, {{ session.nombre() }}</p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">Calendario</h1>
+    </div>
+    <div class="page-actions">
+      <button type="button" class="btn btn-secondary" (click)="irHorarios()">
+        Ver día
+        <app-icon name="list-check" [size]="16" />
+      </button>
+    </div>
+  </header>
+
+  <!-- Tira semanal -->
+  <div class="week-nav">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Semana anterior"
+      title="Semana anterior"
+      (click)="semanaAnterior()"
+    >
+      <app-icon name="chevron-left" [size]="18" />
+    </button>
+
+    <div class="week-grid">
+      @for (dia of semana(); track dia.key) {
+        <button
+          type="button"
+          class="day-cell"
+          [class.day-selected]="dia.key === diaSeleccionado()"
+          [attr.aria-pressed]="dia.key === diaSeleccionado()"
+          [attr.aria-label]="dia.dow + ' ' + dia.num"
+          (click)="seleccionarDia(dia)"
+        >
+          <b>{{ dia.num }}</b>
+          <small>{{ dia.dow }}</small>
+          @if (dia.esHoy) {
+            <i class="today-dot" aria-hidden="true"></i>
+          }
+        </button>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Semana siguiente"
+      title="Semana siguiente"
+      (click)="semanaSiguiente()"
+    >
+      <app-icon name="chevron-right" [size]="18" />
+    </button>
+  </div>
+
+  <div class="month-row">
+    <span>{{ tituloMes() }}</span>
+    <button type="button" class="today-link" (click)="irHoy()">Hoy</button>
+  </div>
+
+  <div class="section-title">
+    <h2>Clases del día</h2>
+    <span class="badge badge-lime">{{ clases().length }}</span>
+  </div>
+
+  <p class="date-pill">
+    <i aria-hidden="true"></i>
+    {{ fechaLabel() }}
+  </p>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="list-row sk-row">
+          <span class="row-icon skeleton sk-icon"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line" style="width: 55%"></span>
+            <span class="skeleton sk-line sk-line-sm" style="width: 40%"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state" role="alert">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar tus clases</h3>
+      <p>{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargarClases()">
+        <app-icon name="refresh" [size]="18" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (clases().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="calendar" [size]="28" /></span>
+      <h3>Sin clases este día</h3>
+      <p class="mb-0">Selecciona otro día de la semana</p>
+    </div>
+  } @else {
+    <div class="list">
+      @for (clase of clases(); track clase.idClase) {
+        <button type="button" class="list-row" (click)="verClase(clase)">
+          <span class="row-icon">
+            <app-icon [name]="iconoHorario(clase)" [size]="20" />
+          </span>
+          <span class="row-main">
+            <span class="row-title">{{ clase.nombre }}</span>
+            <span class="row-sub">
+              {{ clase.descripcionHorario }} · Coach {{ clase.profesorNombre }}
+            </span>
+            <span class="tag-row">
+              @if (asiste(clase)) {
+                <span class="badge badge-lime">ASISTIRÁS</span>
+              }
+              @if (tieneLugares(clase)) {
+                <span class="badge badge-success">{{ lugaresTexto(clase) }}</span>
+              }
+              @if (esClaseLlena(clase)) {
+                <span class="badge badge-danger">CLASE LLENA</span>
+              }
+            </span>
+          </span>
+          <span class="row-cta">
+            Reservar
+            <app-icon name="chevron-right" [size]="16" />
+          </span>
+        </button>
+      }
+    </div>
+  }
+</div>

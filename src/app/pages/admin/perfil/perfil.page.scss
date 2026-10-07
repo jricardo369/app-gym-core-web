@@ -1,0 +1,166 @@
+.page-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.perfil-tools {
+  display: grid;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.u-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.u-row {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md);
+  cursor: pointer;
+}
+
+.u-row:hover {
+  border-color: rgba(213, 255, 95, 0.25);
+}
+
+.u-open {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.u-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.u-name {
+  font-weight: 600;
+  color: var(--color-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.u-sub {
+  color: var(--color-muted-foreground);
+  font-size: var(--fs-small);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.u-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  min-height: 6px;
+}
+
+.u-side {
+  flex-shrink: 0;
+  max-width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.u-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-icon-warn {
+  color: var(--color-warning);
+  border-color: rgba(250, 204, 21, 0.35);
+}
+
+.btn-icon-warn:hover {
+  background: rgba(250, 204, 21, 0.14);
+  border-color: var(--color-warning);
+}
+
+.u-more {
+  margin-top: var(--space-md);
+}
+
+/* Skeleton */
+.u-row-skeleton {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  cursor: default;
+}
+
+.u-sk-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.u-sk-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.u-sk-line {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.w-60 {
+  width: 60%;
+}
+.w-40 {
+  width: 40%;
+}
+.w-30 {
+  width: 30%;
+}
+
+@media (max-width: 374px) {
+  .u-open {
+    gap: var(--space-sm);
+  }
+
+  .u-actions {
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1024px) {
+  .perfil-tools {
+    grid-template-columns: minmax(240px, 340px) minmax(260px, 360px);
+    align-items: center;
+  }
+}
+
+/* Targets táctiles >= 44px (solo este componente) */
+.page-actions .btn,
+.segment button {
+  min-height: 44px;
+}

@@ -1,0 +1,195 @@
+<div class="page">
+  <header class="page-header">
+    <button type="button" class="btn-icon" (click)="atras()" aria-label="Volver a las clases" title="Volver">
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">Clase #{{ idClase }}</p>
+      <h1 class="page-title">Editar clase</h1>
+    </div>
+    <div class="page-actions">
+      <button
+        type="button"
+        class="btn-icon btn-delete"
+        (click)="eliminar()"
+        [disabled]="enviando()"
+        aria-label="Eliminar clase"
+        title="Eliminar clase"
+      >
+        <app-icon name="trash" [size]="18" />
+      </button>
+    </div>
+  </header>
+
+  <form [formGroup]="ec" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label for="nombre">Nombre de la clase</label>
+      <input
+        id="nombre"
+        class="input"
+        type="text"
+        formControlName="nombre"
+        placeholder="Ej. Spinning Avanzado"
+        autocomplete="off"
+        [class.error]="ec.controls.nombre.touched && ec.controls.nombre.invalid"
+      />
+      @if (ec.controls.nombre.touched && ec.controls.nombre.invalid) {
+        <p class="error-text">El nombre es obligatorio</p>
+      }
+    </div>
+
+    <div class="grid grid-2">
+      <div class="field">
+        <label for="horaInicio">Hora inicio</label>
+        <input
+          id="horaInicio"
+          class="input"
+          type="text"
+          formControlName="horaInicio"
+          maxlength="2"
+          placeholder="0"
+          inputmode="numeric"
+          [class.error]="ec.controls.horaInicio.touched && ec.controls.horaInicio.invalid"
+        />
+        @if (ec.controls.horaInicio.touched && ec.controls.horaInicio.invalid) {
+          <p class="error-text">Usa una hora de 0 a 23</p>
+        } @else {
+          <p class="hint-text">Formato 24h (0–23)</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="horaFin">Hora fin</label>
+        <input
+          id="horaFin"
+          class="input"
+          type="text"
+          formControlName="horaFin"
+          maxlength="2"
+          placeholder="0"
+          inputmode="numeric"
+          [class.error]="ec.controls.horaFin.touched && ec.controls.horaFin.invalid"
+        />
+        @if (ec.controls.horaFin.touched && ec.controls.horaFin.invalid) {
+          <p class="error-text">Usa una hora de 0 a 23</p>
+        } @else {
+          <p class="hint-text">Formato 24h (0–23)</p>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="field-label" id="horario-label">Horario</span>
+      <div class="segment" role="group" aria-labelledby="horario-label">
+        <button
+          type="button"
+          [class.active]="ec.controls.horario.value === 'M'"
+          [attr.aria-pressed]="ec.controls.horario.value === 'M'"
+          (click)="setHorario('M')"
+        >
+          <app-icon name="sun" [size]="14" />
+          Matutino
+        </button>
+        <button
+          type="button"
+          [class.active]="ec.controls.horario.value === 'V'"
+          [attr.aria-pressed]="ec.controls.horario.value === 'V'"
+          (click)="setHorario('V')"
+        >
+          <app-icon name="moon" [size]="14" />
+          Vespertino
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="field">
+        <label for="personas">Cantidad de personas</label>
+        <input
+          id="personas"
+          class="input"
+          type="text"
+          formControlName="personas"
+          maxlength="3"
+          placeholder="0"
+          inputmode="numeric"
+          [class.error]="ec.controls.personas.touched && ec.controls.personas.invalid"
+        />
+        @if (ec.controls.personas.touched && ec.controls.personas.invalid) {
+          <p class="error-text">Indica el cupo de la clase</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="dia">Fecha</label>
+        <input
+          id="dia"
+          class="input"
+          type="date"
+          formControlName="dia"
+          [class.error]="ec.controls.dia.touched && ec.controls.dia.invalid"
+        />
+        @if (ec.controls.dia.touched && ec.controls.dia.invalid) {
+          <p class="error-text">Selecciona el día de la clase</p>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="profesor">Coach</label>
+      <select
+        id="profesor"
+        class="input"
+        formControlName="profesor"
+        [class.error]="ec.controls.profesor.touched && ec.controls.profesor.invalid"
+      >
+        <option [ngValue]="null" disabled>
+          {{ cargandoEntrenadores() ? 'Cargando entrenadores…' : 'Selecciona coach' }}
+        </option>
+        @for (entrenador of entrenadores(); track entrenador.idUsuario) {
+          <option [ngValue]="entrenador.idUsuario">{{ entrenador.nombre }}</option>
+        }
+      </select>
+      @if (ec.controls.profesor.touched && ec.controls.profesor.invalid) {
+        <p class="error-text">Selecciona un coach</p>
+      }
+    </div>
+
+    <div class="field">
+      <span class="field-label" id="estatus-label">Estatus</span>
+      <div class="segment" role="group" aria-labelledby="estatus-label">
+        <button
+          type="button"
+          [class.active]="ec.controls.estatus.value === '1'"
+          [attr.aria-pressed]="ec.controls.estatus.value === '1'"
+          (click)="setEstatus('1')"
+        >
+          <app-icon name="check" [size]="14" />
+          Activada
+        </button>
+        <button
+          type="button"
+          [class.active]="ec.controls.estatus.value === '0'"
+          [attr.aria-pressed]="ec.controls.estatus.value === '0'"
+          (click)="setEstatus('0')"
+        >
+          <app-icon name="close" [size]="14" />
+          Desactivada
+        </button>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="atras()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+        @if (enviando()) {
+          <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+          Guardando…
+        } @else {
+          <app-icon name="check" [size]="16" />
+          Guardar cambios
+        }
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,60 @@
+.page-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pq-card {
+  display: block;
+}
+
+.pq-sk {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pq-sk-line {
+  height: 14px;
+  border-radius: 6px;
+}
+
+.w-70 {
+  width: 70%;
+}
+.w-50 {
+  width: 50%;
+}
+
+.pq-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-card);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  border-radius: var(--radius-md);
+  color: var(--color-destructive);
+  font-size: var(--fs-small);
+
+  span {
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .btn {
+    color: var(--color-foreground);
+  }
+}
+
+@media (max-width: 767px) {
+  .pq-error .btn {
+    width: 100%;
+  }
+}
+
+/* Targets táctiles >= 44px (solo este componente) */
+.page-actions .btn {
+  min-height: 44px;
+}

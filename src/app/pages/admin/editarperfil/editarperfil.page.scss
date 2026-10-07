@@ -1,0 +1,98 @@
+.page-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ep-card {
+  display: block;
+}
+
+.ep-sk {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ep-sk .u-sk-line {
+  height: 14px;
+  border-radius: 6px;
+}
+
+.w-40 {
+  width: 40%;
+}
+.w-60 {
+  width: 60%;
+}
+
+.ep-faltas {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+
+  .section-title {
+    margin: 0 0 var(--space-md);
+
+    h3 {
+      margin: 0;
+      font-size: var(--fs-h3);
+    }
+  }
+}
+
+.ep-falta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+}
+
+.ep-falta-txt {
+  font-size: var(--fs-small);
+  color: var(--color-muted-foreground);
+
+  b {
+    color: var(--color-warning);
+  }
+}
+
+.ep-falta-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.ep-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+
+  .btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .ep-falta-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ep-falta-actions {
+    width: 100%;
+
+    .btn {
+      flex: 1;
+    }
+  }
+}
+
+/* Targets táctiles >= 44px (solo este componente) */
+.page-actions .btn,
+.ep-acciones .btn,
+.ep-falta-actions .btn,
+.segment button {
+  min-height: 44px;
+}

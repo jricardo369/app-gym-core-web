@@ -1,0 +1,200 @@
+/* Tira semanal */
+.week-nav {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-sm);
+}
+
+.week-arrow {
+  width: 44px;
+  min-height: 56px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+
+  &:hover {
+    background: var(--color-card-2);
+    border-color: var(--color-border-strong);
+  }
+}
+
+.week-grid {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day-cell {
+  position: relative;
+  min-height: 56px;
+  padding: 8px 0 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-foreground);
+  font: inherit;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+
+  b {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  small {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--color-muted-foreground);
+  }
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+.day-cell.day-selected {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+
+  b,
+  small {
+    color: var(--color-on-primary);
+  }
+}
+
+.today-dot {
+  position: absolute;
+  bottom: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.day-selected .today-dot {
+  background: var(--color-on-primary);
+}
+
+/* Mes + atajo "Hoy" */
+.month-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 2px 0;
+
+  span {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--color-muted-foreground);
+    text-transform: capitalize;
+  }
+}
+
+.today-link {
+  min-height: 44px;
+  padding: 0 4px;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Píldora de fecha */
+.date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  margin-bottom: var(--space-md);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  span {
+    text-transform: capitalize;
+  }
+}
+
+/* Filas de clase */
+.row-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.row-main .row-sub {
+  display: block;
+}
+
+.row-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* Skeleton */
+.sk-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sk-line {
+  display: block;
+  width: 60%;
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.sk-short {
+  width: 35%;
+  height: 10px;
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .day-cell {
+    padding: 12px 0 16px;
+
+    b {
+      font-size: 17px;
+    }
+
+    small {
+      font-size: 10px;
+    }
+  }
+}

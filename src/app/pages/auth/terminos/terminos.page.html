@@ -1,0 +1,63 @@
+<div class="brand-mobile" style="justify-content: center; margin-bottom: var(--space-lg)">
+  <span class="brand-mark" aria-hidden="true">L</span>
+  <div style="text-align: left">
+    <div class="brand-name" style="font-size: 1.15rem">LUA Studio</div>
+    <div class="brand-sub">Gym Core</div>
+  </div>
+</div>
+
+<h1 style="text-align: center">Aviso del estudio</h1>
+<p class="text-muted small text-center" style="margin-bottom: var(--space-lg)">
+  Lee las condiciones antes de continuar
+</p>
+
+<div class="card">
+  <form [formGroup]="form" (ngSubmit)="aceptar()" novalidate>
+    <ul class="aviso-list">
+      @for (aviso of avisos; track aviso) {
+        <li>{{ aviso }}</li>
+      }
+      <li>
+        La política de cancelación es de
+        @if (cargandoConfig()) {
+          <span class="text-muted">cargando…</span>
+        } @else {
+          <b class="text-lime">{{ horasCancelacion() || '—' }}</b>
+        }
+        horas antes de tu clase.
+      </li>
+    </ul>
+
+    <label class="check" for="acepto">
+      <input
+        id="acepto"
+        type="checkbox"
+        formControlName="acepto"
+        [attr.aria-describedby]="
+          form.controls.acepto.touched && form.controls.acepto.invalid ? 'acepto-error' : null
+        "
+      />
+      <span>Estoy de acuerdo con los terminos y condiciones</span>
+    </label>
+    @if (form.controls.acepto.touched && form.controls.acepto.invalid) {
+      <p class="error-text" id="acepto-error">
+        Es necesario aceptar los terminos y condiciones para poder continuar
+      </p>
+    }
+
+    <button
+      type="submit"
+      class="btn btn-primary btn-block"
+      style="margin-top: var(--space-md)"
+      [disabled]="enviando()"
+    >
+      @if (enviando()) {
+        <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+        Continuando…
+      } @else {
+        Continuar
+        <app-icon name="arrow-right" [size]="18" />
+      }
+    </button>
+  </form>
+</div>

@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+/* Membresía / multas */
+.estado-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+.estado-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.estado-multas {
+  margin: 0;
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* Grid perfil */
+.perfil-grid {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: var(--space-lg);
+}
+
+/* Filas de cuenta */
+.row-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.list-row .row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+@media (min-width: 1024px) {
+  .perfil-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,127 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver a usuarios"
+      title="Volver"
+      (click)="volver()"
+    >
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div class="page-head-text">
+      <h1 class="page-title">Nuevo paquete</h1>
+      <p class="page-sub">Inscripción para el usuario {{ idUsuario() }}</p>
+    </div>
+    <div class="page-actions">
+      <span class="badge badge-lime">Sociedad {{ sociedad() || '—' }}</span>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="card" aria-busy="true" aria-label="Cargando catálogos">
+      <div class="pq-sk">
+        <span class="skeleton pq-sk-line"></span>
+        <span class="skeleton pq-sk-line"></span>
+        <span class="skeleton pq-sk-line w-70"></span>
+        <span class="skeleton pq-sk-line w-50"></span>
+      </div>
+      <div class="loading-block"><span class="spinner"></span></div>
+    </div>
+  } @else {
+    @if (error()) {
+      <div class="pq-error" role="alert">
+        <app-icon name="alert" [size]="18" />
+        <span>{{ error() }}</span>
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          aria-label="Reintentar cargar catálogos"
+          (click)="cargarCatalogos()"
+        >
+          <app-icon name="refresh" [size]="16" />
+          Reintentar
+        </button>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="card pq-card">
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="pq-pago">Tipo de pago</label>
+          <select
+            id="pq-pago"
+            class="input"
+            formControlName="tipoPago"
+            [class.error]="invalido('tipoPago')"
+          >
+            <option value="" disabled>Selecciona pago</option>
+            @for (p of tiposPago(); track p.id) {
+              <option [value]="p.id">{{ p.descripcion || p.id }}</option>
+            }
+          </select>
+          @if (invalido('tipoPago')) {
+            <p class="error-text">Selecciona el tipo de pago</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="pq-inscripcion">Tipo de inscripción</label>
+          <select
+            id="pq-inscripcion"
+            class="input"
+            formControlName="tipoInscripcion"
+            [class.error]="invalido('tipoInscripcion')"
+          >
+            <option value="" disabled>Selecciona inscripción</option>
+            @for (i of tiposInscripcion(); track i.id) {
+              <option [value]="i.id">{{ i.tipo_inscripcion || i.descripcion || i.id }}</option>
+            }
+          </select>
+          @if (invalido('tipoInscripcion')) {
+            <p class="error-text">Selecciona el tipo de inscripción</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="pq-fecha">Fecha de inicio</label>
+          <input
+            id="pq-fecha"
+            class="input"
+            type="date"
+            formControlName="fechaInicio"
+            [class.error]="invalido('fechaInicio')"
+          />
+          @if (invalido('fechaInicio')) {
+            <p class="error-text">Indica la fecha de inicio</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="pq-comentario">Comentario</label>
+          <input
+            id="pq-comentario"
+            class="input"
+            type="text"
+            formControlName="comentario"
+            placeholder="Comentario"
+            [class.error]="invalido('comentario')"
+          />
+          @if (invalido('comentario')) {
+            <p class="error-text">El comentario es obligatorio</p>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+        @if (enviando()) {
+          <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+          Guardando…
+        } @else {
+          <app-icon name="plus" [size]="18" />
+          Agregar paquete
+        }
+      </button>
+    </form>
+  }
+</div>

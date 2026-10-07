@@ -1,0 +1,74 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      (click)="atras()"
+      aria-label="Volver al calendario"
+      title="Volver"
+    >
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">{{ fechaf }}</p>
+      <h1 class="page-title">Clases</h1>
+    </div>
+    <div class="page-actions">
+      <span class="badge badge-lime">{{ clases().length }}</span>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="loading-block" aria-busy="true">
+      <div class="spinner"></div>
+      <span>Cargando clases…</span>
+    </div>
+  } @else if (clases().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="calendar" [size]="28" /></span>
+      <h3>Sin Clases</h3>
+      <p class="text-muted mb-0">No hay clases programadas para esta fecha</p>
+    </div>
+  } @else {
+    <div class="grid grid-2 grid-3">
+      @for (clase of clases(); track clase.idClase) {
+        <button
+          type="button"
+          class="card card-hover card-cta cls-card"
+          (click)="verClase(clase)"
+        >
+          <span class="cls-top">
+            <span class="cls-when">
+              <app-icon [name]="iconoHorario(clase.horario)" [size]="16" />
+              {{ clase.descripcionHorario }}
+            </span>
+            @if (esAdmin) {
+              @if (clase.estatus === '1' || clase.estatus === 1) {
+                <span class="badge badge-success">Activa</span>
+              } @else {
+                <span class="badge badge-muted">Inactiva</span>
+              }
+            }
+          </span>
+
+          <b class="cls-name">{{ clase.nombre }}</b>
+
+          @if (esAdmin) {
+            <span class="text-muted small">Coach {{ clase.profesorNombre }}</span>
+          }
+
+          <span class="cls-foot">
+            <span class="cls-lugares">
+              <span class="text-muted small">Lugares</span>
+              <span [class]="lugaresBadge(clase)">{{ lugaresTexto(clase) }}</span>
+            </span>
+            <span class="cls-cta">
+              Asistentes
+              <app-icon name="chevron-right" [size]="14" />
+            </span>
+          </span>
+        </button>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,23 @@
+<div class="auth">
+  <section class="auth-hero" aria-hidden="true">
+    <div class="hero-content">
+      <span class="badge badge-lime" style="margin-bottom: 16px">Reserva tu clase</span>
+      <h1 class="hero-title">Get Set,<br />Ready for Workout</h1>
+      <p class="hero-text">
+        Gestiona clases, lugares y asistencias de <strong>LUA Studio</strong> desde cualquier
+        dispositivo.
+      </p>
+      <ul class="hero-list">
+        <li><app-icon name="check" [size]="16" /> Horarios en tiempo real</li>
+        <li><app-icon name="check" [size]="16" /> aparta tu lugar en segundos</li>
+        <li><app-icon name="check" [size]="16" /> Historial de asistencias</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="auth-form">
+    <div class="auth-card">
+      <router-outlet />
+    </div>
+  </section>
+</div>

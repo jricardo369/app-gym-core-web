@@ -1,0 +1,114 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      (click)="atras()"
+      aria-label="Volver a las clases"
+      title="Volver"
+    >
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">{{ descripcionHorario || fechaf }}</p>
+      <h1 class="page-title">Asistentes</h1>
+    </div>
+    <div class="page-actions">
+      <span class="badge badge-lime">{{ asistentes().length }}</span>
+    </div>
+  </header>
+
+  <!-- Resumen de la clase -->
+  <section class="card info-card" aria-label="Datos de la clase">
+    <div class="info-head">
+      <div>
+        <p class="text-muted small mb-0">Clase</p>
+        <b>{{ clase().nombre || nombreClase }}</b>
+      </div>
+      <span [class]="estatusBadge()">{{ estatusTexto() }}</span>
+    </div>
+    <div class="info-grid">
+      <div>
+        <p class="text-muted small mb-0">Fecha</p>
+        <b>{{ fechaf }}</b>
+      </div>
+      <div>
+        <p class="text-muted small mb-0">Horario</p>
+        <b>{{ clase().horaInicio || '—' }} - {{ clase().horaFin || '—' }}</b>
+      </div>
+      <div>
+        <p class="text-muted small mb-0">Cupo</p>
+        <b>{{ clase().personas || '—' }}</b>
+      </div>
+      <div>
+        <p class="text-muted small mb-0">Coach</p>
+        <b>{{ profesorNombre || '—' }}</b>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-title">
+    <h2>Lista</h2>
+    <span class="text-muted small">Toca un asistente para gestionar su falta</span>
+  </div>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <div class="list-row" style="cursor: default">
+          <span class="skeleton sk-ico"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line"></span>
+            <span class="skeleton sk-line sk-short"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar la lista</h3>
+      <p class="text-muted">{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="cargar()">
+        <app-icon name="refresh" [size]="16" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (asistentes().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="users" [size]="28" /></span>
+      <h3>No hay asistentes</h3>
+      <p class="text-muted mb-0">Nadie se ha apartado un lugar en esta clase</p>
+    </div>
+  } @else {
+    <div class="list">
+      @for (a of asistentes(); track a.idUsuario) {
+        <button
+          type="button"
+          class="list-row"
+          [disabled]="guardando()"
+          (click)="ponerFalta(a.idUsuario, a.nombre, a.lugar ?? 1, a.asistio)"
+          [attr.aria-label]="'Gestionar asistencia de ' + a.nombre"
+        >
+          <span class="avatar">{{ iniciales(a.nombre) }}</span>
+          <span class="row-main">
+            <span class="row-head">
+              <b class="row-title">{{ a.nombre }}</b>
+              <span class="badge badge-muted">L{{ a.lugar }}</span>
+              @if (a.asistio === 'A') {
+                <span class="badge badge-success">Asistió</span>
+              }
+              @if (a.asistio === 'F') {
+                <span class="badge badge-danger">Falta</span>
+              }
+            </span>
+            <span class="row-sub">{{ a.usuario }}</span>
+          </span>
+          <span class="text-muted" aria-hidden="true">
+            <app-icon [name]="a.asistio === 'A' ? 'check' : 'close'" [size]="18" />
+          </span>
+        </button>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,156 @@
+<div class="page">
+  <header class="page-header">
+    <button type="button" class="btn-icon" (click)="atras()" aria-label="Volver a las clases" title="Volver">
+      <app-icon name="arrow-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">Define horario, coach y cupo</p>
+      <h1 class="page-title">Nueva clase</h1>
+    </div>
+  </header>
+
+  <form [formGroup]="nc" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label for="nombre">Nombre de la clase</label>
+      <input
+        id="nombre"
+        class="input"
+        type="text"
+        formControlName="nombre"
+        placeholder="Ej. Spinning Avanzado"
+        autocomplete="off"
+        [class.error]="nc.controls.nombre.touched && nc.controls.nombre.invalid"
+      />
+      @if (nc.controls.nombre.touched && nc.controls.nombre.invalid) {
+        <p class="error-text">El nombre es obligatorio</p>
+      }
+    </div>
+
+    <div class="grid grid-2">
+      <div class="field">
+        <label for="horaInicio">Hora inicio</label>
+        <input
+          id="horaInicio"
+          class="input"
+          type="text"
+          formControlName="horaInicio"
+          maxlength="2"
+          placeholder="0"
+          inputmode="numeric"
+          [class.error]="nc.controls.horaInicio.touched && nc.controls.horaInicio.invalid"
+        />
+        @if (nc.controls.horaInicio.touched && nc.controls.horaInicio.invalid) {
+          <p class="error-text">Usa una hora de 0 a 23</p>
+        } @else {
+          <p class="hint-text">Formato 24h (0–23)</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="horaFin">Hora fin</label>
+        <input
+          id="horaFin"
+          class="input"
+          type="text"
+          formControlName="horaFin"
+          maxlength="2"
+          placeholder="0"
+          inputmode="numeric"
+          [class.error]="nc.controls.horaFin.touched && nc.controls.horaFin.invalid"
+        />
+        @if (nc.controls.horaFin.touched && nc.controls.horaFin.invalid) {
+          <p class="error-text">Usa una hora de 0 a 23</p>
+        } @else {
+          <p class="hint-text">Formato 24h (0–23)</p>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="field-label" id="horario-label">Horario</span>
+      <div class="segment" role="group" aria-labelledby="horario-label">
+        <button
+          type="button"
+          [class.active]="nc.controls.horario.value === 'M'"
+          [attr.aria-pressed]="nc.controls.horario.value === 'M'"
+          (click)="setHorario('M')"
+        >
+          <app-icon name="sun" [size]="14" />
+          Matutino
+        </button>
+        <button
+          type="button"
+          [class.active]="nc.controls.horario.value === 'V'"
+          [attr.aria-pressed]="nc.controls.horario.value === 'V'"
+          (click)="setHorario('V')"
+        >
+          <app-icon name="moon" [size]="14" />
+          Vespertino
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="field">
+        <label for="personas">Cantidad de personas</label>
+        <input
+          id="personas"
+          class="input"
+          type="text"
+          formControlName="personas"
+          maxlength="3"
+          placeholder="0"
+          inputmode="numeric"
+          [class.error]="nc.controls.personas.touched && nc.controls.personas.invalid"
+        />
+        @if (nc.controls.personas.touched && nc.controls.personas.invalid) {
+          <p class="error-text">Indica el cupo de la clase</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="dia">Fecha</label>
+        <input
+          id="dia"
+          class="input"
+          type="date"
+          formControlName="dia"
+          [class.error]="nc.controls.dia.touched && nc.controls.dia.invalid"
+        />
+        @if (nc.controls.dia.touched && nc.controls.dia.invalid) {
+          <p class="error-text">Selecciona el día de la clase</p>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="profesor">Coach</label>
+      <select
+        id="profesor"
+        class="input"
+        formControlName="profesor"
+        [class.error]="nc.controls.profesor.touched && nc.controls.profesor.invalid"
+      >
+        <option [ngValue]="null" disabled>
+          {{ cargandoEntrenadores() ? 'Cargando entrenadores…' : 'Selecciona coach' }}
+        </option>
+        @for (entrenador of entrenadores(); track entrenador.idUsuario) {
+          <option [ngValue]="entrenador.idUsuario">{{ entrenador.nombre }}</option>
+        }
+      </select>
+      @if (nc.controls.profesor.touched && nc.controls.profesor.invalid) {
+        <p class="error-text">Selecciona un coach</p>
+      }
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+      @if (enviando()) {
+        <span class="spinner" style="width: 18px; height: 18px; border-width: 2px"></span>
+        Guardando…
+      } @else {
+        <app-icon name="plus" [size]="16" />
+        Agregar clase
+      }
+    </button>
+  </form>
+</div>

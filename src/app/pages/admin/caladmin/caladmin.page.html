@@ -1,0 +1,131 @@
+<div class="page">
+  <header class="page-header">
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub">{{ esCoach ? 'Mis clases asignadas' : 'Clases del estudio' }}</p>
+      <h1 class="page-title">Calendario</h1>
+    </div>
+    <div class="page-actions">
+      <button type="button" class="btn-icon" (click)="irHoy()" aria-label="Ir a hoy" title="Hoy">
+        <app-icon name="calendar" [size]="18" />
+      </button>
+    </div>
+  </header>
+
+  <!-- Tira semanal -->
+  <div class="week-nav">
+    <button
+      type="button"
+      class="week-arrow"
+      (click)="semanaAnterior()"
+      aria-label="Semana anterior"
+      title="Semana anterior"
+    >
+      <app-icon name="chevron-left" [size]="18" />
+    </button>
+
+    <div class="week-grid">
+      @for (dia of semana(); track dia.key) {
+        <button
+          type="button"
+          class="day-cell"
+          [class.day-selected]="dia.key === diaSeleccionado()"
+          [attr.aria-pressed]="dia.key === diaSeleccionado()"
+          (click)="seleccionarDia(dia)"
+        >
+          <b>{{ dia.num }}</b>
+          <small>{{ dia.dow }}</small>
+          @if (dia.esHoy) {
+            <i class="today-dot" aria-hidden="true"></i>
+          }
+        </button>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="week-arrow"
+      (click)="semanaSiguiente()"
+      aria-label="Semana siguiente"
+      title="Semana siguiente"
+    >
+      <app-icon name="chevron-right" [size]="18" />
+    </button>
+  </div>
+
+  <div class="month-row">
+    <span>{{ tituloMes() }}</span>
+    <button type="button" class="today-link" (click)="irHoy()">Hoy</button>
+  </div>
+
+  <div class="section-title">
+    <h2>Clases del día</h2>
+    <span class="badge badge-lime">{{ totalClases() }}</span>
+  </div>
+
+  <div class="date-pill">
+    <i aria-hidden="true"></i>
+    <span>{{ fechaLabel() }}</span>
+  </div>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="list-row" style="cursor: default">
+          <span class="skeleton sk-ico"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line"></span>
+            <span class="skeleton sk-line sk-short"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar las clases</h3>
+      <p class="text-muted">{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="cargarClases()">
+        <app-icon name="refresh" [size]="16" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (sinClases()) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="calendar" [size]="28" /></span>
+      <h3>Sin clases este día</h3>
+      <p class="text-muted mb-0">Selecciona otro día de la semana</p>
+    </div>
+  } @else {
+    <div class="list">
+      @for (clase of clases(); track clase.idClase) {
+        <button type="button" class="list-row" (click)="verClase(clase)">
+          <span class="avatar">
+            <app-icon [name]="iconoHorario(clase.horario)" [size]="20" />
+          </span>
+          <span class="row-main">
+            <span class="row-head">
+              <b class="row-title">{{ clase.nombre }}</b>
+              @if (clase.estatus === '1' || clase.estatus === 1) {
+                <span class="badge badge-success">Activa</span>
+              }
+              @if (clase.estatus === '0' || clase.estatus === 0) {
+                <span class="badge badge-muted">Inactiva</span>
+              }
+            </span>
+            <span class="row-sub">{{ clase.descripcionHorario }} · Coach {{ clase.profesorNombre }}</span>
+            <span class="row-tags">
+              @if (tieneLugares(clase)) {
+                <span class="badge badge-lime">{{ clase.lugaresDisponibles }} lugares</span>
+              } @else if (claseLlena(clase)) {
+                <span class="badge badge-danger">Clase llena</span>
+              }
+            </span>
+          </span>
+          <span class="text-muted" aria-hidden="true">
+            <app-icon name="chevron-right" [size]="18" />
+          </span>
+        </button>
+      }
+    </div>
+  }
+</div>

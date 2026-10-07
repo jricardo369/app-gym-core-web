@@ -1,0 +1,140 @@
+<div class="page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="btn-icon"
+      aria-label="Volver a mis clases"
+      title="Volver"
+      (click)="atras()"
+    >
+      <app-icon name="chevron-left" [size]="18" />
+    </button>
+    <div style="flex: 1; min-width: 0">
+      <p class="page-sub" style="margin: 0">
+        @if (profesor) {
+          Coach {{ profesor }}
+        } @else {
+          Lista de asistentes
+        }
+      </p>
+      <h1 class="page-title" style="font-size: var(--fs-h2)">{{ nombre }}</h1>
+    </div>
+    <div class="page-actions">
+      <span class="badge badge-muted">{{ asistentes().length }} asistentes</span>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="field" style="margin-bottom: var(--space-sm)">
+      <label for="fechaClase">Fecha de la clase</label>
+      <input
+        id="fechaClase"
+        class="input"
+        type="date"
+        [value]="fecha()"
+        (change)="cambiarFecha($event)"
+      />
+    </div>
+
+    @if (lugares() !== '') {
+      <p class="small text-muted mb-0">Lugares disponibles: {{ lugares() }}</p>
+    }
+
+    @if (session.isUser()) {
+      <div class="acciones">
+        @if (!yoEstoy()) {
+          <button type="button" class="btn btn-primary btn-block" (click)="asistir()">
+            <app-icon name="plus" [size]="18" />
+            Asistir
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="btn btn-danger btn-block"
+            [disabled]="procesando()"
+            (click)="quitarPropia()"
+          >
+            <app-icon name="close" [size]="18" />
+            Quitar asistencia
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="section-title">
+    <h2>Asistentes</h2>
+    <span class="badge badge-lime">{{ asistentes().length }}</span>
+  </div>
+
+  @if (cargando()) {
+    <div class="list" aria-busy="true">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="list-row sk-row">
+          <span class="row-icon skeleton sk-icon"></span>
+          <span class="row-main">
+            <span class="skeleton sk-line" style="width: 55%"></span>
+            <span class="skeleton sk-line sk-line-sm" style="width: 35%"></span>
+          </span>
+        </div>
+      }
+    </div>
+  } @else if (mensajeError()) {
+    <div class="empty-state" role="alert">
+      <span class="empty-icon"><app-icon name="alert" [size]="28" /></span>
+      <h3>No pudimos cargar los asistentes</h3>
+      <p>{{ mensajeError() }}</p>
+      <button type="button" class="btn btn-secondary" (click)="cargar()">
+        <app-icon name="refresh" [size]="18" />
+        Reintentar
+      </button>
+    </div>
+  } @else if (asistentes().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon"><app-icon name="users" [size]="28" /></span>
+      <h3>Sin asistentes</h3>
+      <p class="mb-0">Nadie se ha registrado para esta fecha</p>
+    </div>
+  } @else {
+    <div class="list">
+      @for (a of asistentes(); track a.idUsuario) {
+        <div class="list-row asis-row">
+          <span class="row-icon">
+            <app-icon name="user" [size]="20" />
+          </span>
+          <span class="row-main">
+            <span class="row-title">
+              {{ a.nombre }}
+              @if (esYo(a)) {
+                <span class="badge badge-lime">Tú</span>
+              }
+            </span>
+            <span class="row-sub">
+              @if (a.lugar !== null && a.lugar !== undefined && a.lugar !== '') {
+                Lugar {{ a.lugar }} ·
+              }
+              {{ a.usuario }}
+            </span>
+          </span>
+          @if (asistio(a)) {
+            <span class="badge badge-success">Asistió</span>
+          } @else {
+            <span class="badge badge-danger">No asistió</span>
+          }
+          @if (!session.isUser()) {
+            <button
+              type="button"
+              class="btn-icon"
+              [attr.aria-label]="'Quitar asistencia de ' + a.nombre"
+              title="Quitar asistencia"
+              [disabled]="procesando()"
+              (click)="quitarAsistente(a)"
+            >
+              <app-icon name="trash" [size]="18" />
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
